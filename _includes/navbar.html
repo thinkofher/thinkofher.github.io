@@ -1,7 +1,28 @@
-<nav class="w3-bar w3-theme-d4">
-  <a href="/index" class="w3-bar-item w3-button w3-mobile w3-large w3-hover-theme">Home</a>
-  <a href="/about" class="w3-bar-item w3-button w3-mobile w3-large w3-hover-theme">About</a>
-  <a href="/blog" class="w3-bar-item w3-button w3-mobile w3-large w3-hover-theme">Blog</a>
-  <a href="/projects" class="w3-bar-item w3-button w3-mobile w3-large w3-hover-theme">Projects</a>
-  <a href="https://github.com/thinkofher/thinkofher.github.io" class="w3-bar-item w3-button w3-mobile w3-large w3-right w3-hover-theme">Source</a>
+<nav>
+  <div class="w3-bar w3-theme-d4">
+    <a href="/index" class="w3-bar-item w3-button w3-large w3-hover-theme">Home</a>
+    <a href="/about" class="w3-bar-item w3-button w3-mobile w3-large w3-hover-theme w3-hide-small">About</a>
+    <a href="/blog" class="w3-bar-item w3-button w3-mobile w3-large w3-hover-theme w3-hide-small">Blog</a>
+    <a href="/projects" class="w3-bar-item w3-button w3-mobile w3-large w3-hover-theme w3-hide-small">Projects</a>
+    <a href="https://github.com/thinkofher/thinkofher.github.io" class="w3-bar-item w3-button w3-mobile w3-large w3-right w3-hover-theme w3-hide-small">Source</a>
+    <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="hamburgerMenu()"><i class="fa fa-bars w3-hover-opacity"></i></a>
+  </div>
+
+  <div id="hamburger" class="w3-bar-block w3-theme-d4 w3-hide w3-hide-large w3-hide-medium">
+    <a href="/about" class="w3-bar-item w3-button w3-hover-theme">About</a>
+    <a href="/blog" class="w3-bar-item w3-button w3-hover-theme">Blog</a>
+    <a href="/projects" class="w3-bar-item w3-button w3-hover-theme">Projects</a>
+    <a href="https://github.com/thinkofher/thinkofher.github.io" class="w3-bar-item w3-button w3-hover-theme">Source</a>
+  </div>
+
 </nav>
+<script>
+  const hamburgerMenu = () => {
+    var x = document.getElementById("hamburger");
+    if (x.className.indexOf("w3-show") == -1) {
+      x.className += " w3-show";
+    } else { 
+      x.className = x.className.replace(" w3-show", "");
+    }
+  }
+</script>

@@ -25,7 +25,7 @@ To be honest, I am not only using Neovim as AppImage. I am using Neovim as AppIm
 
 #### LSP out of the box
 
-At the time of writing this post, lsp api for Neovim is working really well. I even have switched lsp client that I was using for a while from [LanguageClient-neovim](https://github.com/autozimu/LanguageClient-neovim) to [built-in](https://github.com/neovim/nvim-lsp). Keep this in mind if you're going to use my dot files. Read more about built-in lsp [here](https://neovim.io/doc/user/lsp.html) or just use `:help lsp` command in your Neovim.
+At the time of writing this post, lsp api for Neovim is working really well. I even have switched lsp client that I was using for a while from [LanguageClient-neovim](https://github.com/autozimu/LanguageClient-neovim) to [built-in](https://github.com/neovim/nvim-lsp). Keep this in mind if you're going to use my [dot files](https://github.com/thinkofher/dotfiles). Read more about built-in lsp [here](https://neovim.io/doc/user/lsp.html) or just use `:help lsp` command in your Neovim.
 
 #### Read more
 

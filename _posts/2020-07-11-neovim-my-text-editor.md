@@ -1,5 +1,6 @@
 ---
 title: "Neovim as my main text editor"
+subtitle: "Keep doing stuff inside terminal emulator, part one: text editing."
 author: thinkofher
 website: "https://github.com/thinkofher"
 layout: post

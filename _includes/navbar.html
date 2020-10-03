@@ -6,7 +6,7 @@
     <a href="/blog" class="w3-bar-item w3-button w3-mobile w3-large w3-hover-theme w3-hide-small">Blog</a>
     <a href="/projects" class="w3-bar-item w3-button w3-mobile w3-large w3-hover-theme w3-hide-small">Projects</a>
     <a href="https://github.com/thinkofher/thinkofher.github.io" class="w3-bar-item w3-button w3-mobile w3-large w3-right w3-hover-theme w3-hide-small">Source</a>
-    <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="hamburgerMenu()"><i class="fa fa-bars w3-hover-opacity"></i></a>
+    <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="hamburgerMenu()"><i id="hamburger-icon" class="fa fa-bars w3-hover-opacity"></i></a>
   </div>
 
   <div id="hamburger" class="w3-bar-block w3-theme-d4 w3-hide w3-hide-large w3-hide-medium">
@@ -16,15 +16,17 @@
     <a href="/projects" class="w3-bar-item w3-button w3-hover-theme">Projects</a>
     <a href="https://github.com/thinkofher/thinkofher.github.io" class="w3-bar-item w3-button w3-hover-theme">Source</a>
   </div>
-
 </nav>
 <script>
   const hamburgerMenu = () => {
-    var x = document.getElementById("hamburger");
-    if (x.className.indexOf("w3-show") == -1) {
-      x.className += " w3-show";
+    var menu = document.getElementById("hamburger");
+    var icon = document.getElementById("hamburger-icon");
+    if (menu.className.indexOf("w3-show") == -1) {
+      menu.className += " w3-show";
+      icon.className = icon.className.replace("fa-bars", "fa-close");
     } else { 
-      x.className = x.className.replace(" w3-show", "");
+      menu.className = menu.className.replace(" w3-show", "");
+      icon.className = icon.className.replace("fa-close", "fa-bars");
     }
   }
 </script>

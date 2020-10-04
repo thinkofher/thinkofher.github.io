@@ -1,0 +1,49 @@
+---
+- name: pazzz
+  url: https://github.com/thinkofher/pazzz
+  tags: [go, crypto, passwords, cli]
+  description: >
+    Pazzz is a stateless unix password manager.
+    Instead of remembering password for every site, you
+    just have to remember your login, site and your secret
+    phrase. Pazzz will always generate the same safe password
+    for the input data, that you will provide.
+
+- name: pants
+  url: https://github.com/thinkofher/pants
+  tags: [go, elm, spa, web]
+  description: >
+    Pants is a simple service for link shortening,
+    builded with go, elm and love. Created only for
+    educational purposes. It provides beautiful UI
+    expierence and simple REST API. It's really easy
+    to build and run it!
+
+- name: go-blog
+  url: https://github.com/thinkofher/go-blog
+  tags: [go, web, docker]
+  description: >
+    Go-blog is a simple web application that gives user
+    ability to write, delete and modify posts. It uses Go
+    and Gorilla toolkit for request routing and managing
+    sessions. Application stores data in PostgreSQL database.
+    In this project I also used a modern deamonless container
+    engine podman.
+
+- name: unixify
+  url: https://github.com/thinkofher/unixify
+  tags: [go, cli, unix]
+  description: >
+    Unixify is a simple command line interface tool for
+    changing file and folder names to be more UNIX like. This
+    is done by converting space white signs to floors and all
+    uppercase letters to lowercase. Unixify also has the ability
+    to rename folders and hidden files.
+
+- name: gotask
+  url: https://github.com/thinkofher/gotask
+  tags: [go, cli]
+  description: >
+    gotask is a easy to use command line interface tool for adding,
+    removing and editing daily tasks in a database stored in your
+    local filesystem.

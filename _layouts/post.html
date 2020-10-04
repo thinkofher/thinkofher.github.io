@@ -5,4 +5,11 @@ layout: default
   {{ page.date | date_to_string }} - written by <a class="w3-black w3-hover-theme" href="{{ page.website }}">@{{ page.author }}</a>
 </small>
 
+<div>
+  <small>Tags:</small>
+  {% for tag in page.tags %}
+    <span class="w3-tag w3-small">{{ tag }}</span>
+  {% endfor %}
+</div>
+
 {{ content }}

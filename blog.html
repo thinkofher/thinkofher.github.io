@@ -1,9 +1,8 @@
 ---
 title: Blog
+subtitle: Me versus computers.
 layout: default
 ---
-<ul>
-  {% for post in site.posts %}
-    <h5><a href="{{ post.url }}">{{ post.title }}</a> - {{ post.date | date: '%B %Y' }}</h5>
-  {% endfor %}
-</ul>
+{% for post in site.posts %}
+  <h5><a href="{{ post.url }}">{{ post.title }}</a> - {{ post.date | date: '%B %Y' }}</h5>
+{% endfor %}

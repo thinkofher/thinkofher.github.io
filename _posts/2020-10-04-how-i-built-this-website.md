@@ -26,3 +26,11 @@ The thing that process data, posts and generates web pages from templates is cal
 in the root of the repository. I strongly believe that it's very easy to install it on other `Linux` distributions or `OS X`.
 
 If you aren't familiar with template engines (like jinja2 or DTL) for HTML files, you should start with writing plain HTML and then extend them with [layouts](https://jekyllrb.com/docs/layouts/) whenever some pattern occurs. You may also use [includes](https://jekyllrb.com/docs/includes/) for things like navigation bar or footer (that's what I am using includes for). What I am describing now are just my suggestions as whole system is very flexible and you can use it as you like. If you still are not feeling confident with the whole idea, just follow the [tutorial](https://jekyllrb.com/docs/step-by-step/01-setup/) and take a look at the `jekyll` [documentation](https://jekyllrb.com/docs/).
+
+### W3.CSS
+
+Unfortunately I'm not the best web designer. I like tweaking JavaScript, I also enjoy working with HTML and different text templating engines. But I was always struggling with writing CSS. I never enjoyed it. I am aware that you can accomplish great things with it and I wish that one day I won't fall asleep when forcing myself to write CSS, but today I'm afraid my websites will continue to look... ugly.
+
+But hey, I am programmer. I can try to make my websites look little less uglier with the help of existing style sheets, that people smarter than me crated to reuse.
+
+There are a lot of CSS frameworks out there. It's hard to choose one. We have also classless style sheets for very minimal sites. And there is also [W3.CSS](https://www.w3schools.com/w3css/).

@@ -33,4 +33,8 @@ Unfortunately I'm not the best web designer. I like tweaking JavaScript, I also 
 
 But hey, I am programmer. I can try to make my websites look little less uglier with the help of existing style sheets, that people smarter than me crated to reuse.
 
-There are a lot of CSS frameworks out there. It's hard to choose one. We have also classless style sheets for very minimal sites. And there is also [W3.CSS](https://www.w3schools.com/w3css/).
+There are a lot of CSS frameworks out there. It's hard to choose one. We have also classless style sheets for very minimalistic sites. And there is [W3.CSS](https://www.w3schools.com/w3css/).
+
+Seriously. Why it isn't popular? It's minimalistic, lightweight and responsive CSS framework inspired by material design, without any JavaScript dependencies. It's also free to use without any license. It's well documented with many functional examples that you can use in your website and great looking templates for starting your work from a little higher level.
+
+It really caught my attention and I will recommend it to everyone that need something small for building your site from scratch without need to write a lot of boilerplate CSS.

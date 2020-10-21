@@ -14,6 +14,8 @@ so I want to take a part in this trend. Also, expect some
 [setters](https://en.wikipedia.org/wiki/Setter) from time
 to time.
 
+My latest post on the blog: "[{{ site.posts[0].title }}]({{ site.posts[0].url }})".
+
 If you came here in hope for some collaboration, you're more
 than welcome. Check out [about](/about) page and visit my
 [projects](/projects). This will give you a brief overview

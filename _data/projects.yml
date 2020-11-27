@@ -1,4 +1,17 @@
 ---
+- name: hakierspejs/long-season
+  url: https://github.com/hakierspejs/long-season
+  tags: [go, web, hackerspace]
+  description: |
+      The long-awaited web service for checking who is currently hacking
+      at hackerspace (or doing anything else anywhere). long-season provides
+      simple, responsive web user interface and REST API, for interacting with
+      service without need for using browser. long-season is fully fledged, you
+      don't need to setup external database or download interpreter. With long-season
+      I was able to explore more advances golang topics like: concurrency, embedding
+      web static files into binary or cross compilation. long-season is also my first
+      open-source project with external contributions from other people.
+
 - name: pazzz
   url: https://github.com/thinkofher/pazzz
   tags: [go, crypto, passwords, cli]

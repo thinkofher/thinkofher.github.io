@@ -1,0 +1,26 @@
+/*
+ * My opinionated change: it's easier to read blogs
+ * with 
+ */
+.w3-content {
+  max-width: 90ch;
+}
+
+/*
+ * Very ugly hack for having navbar aligned with article 
+ * title.
+ *
+ * I love css frameworks.
+ */
+@media only screen and (min-width: 760px) {
+  .shift-nav {
+    position: relative;
+    margin: 0 auto;
+
+    /*
+     * literally negative value of horizontal padding of
+     * w3-bar-item class
+     */
+    left: -16px;
+  }
+}

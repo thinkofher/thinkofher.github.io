@@ -8,7 +8,7 @@ layout: default
 
 I strongly recommend you to use e2e encryption, when using e-mail for personal conversations.
 
-`mail at bdudek.xyz`, [gpg key](assets/gpg/mailatbdudek.xyz.public.asc)
+`mail at bdudek.xyz`, [gpg key](assets/gpg/mailatbdudek.xyz.pub.asc)
 
 #### [Telegram](https://t.me/thinkofher)
 

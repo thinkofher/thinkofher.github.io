@@ -1,9 +1,10 @@
 ---
 title: About
 subtitle: ...the man who runs this jam.
-layout: default
+layout: page
 ---
 ### Profile
+
 Self-made wannabe hacker with engineering background. I am a graduate of the **AGH University of Science and Technology** in Cracow. I am mainly interested in web technologies and operating systems from the Linux family. I am an enthusiast and an advocate of [Free](https://en.wikipedia.org/wiki/Free_software) and [Open Source](https://en.wikipedia.org/wiki/Open-source_software) software. I'm highly enjoying using bleeding edge technologies, especially modern programming languages such as Go, Python or Rust. In my free time I try to develop my private projects (check [my Github profile](https://github.com/thinkofher)!) and broaden my knowledge of programming techniques.
 
 ### Quick facts
@@ -50,3 +51,6 @@ Self-made wannabe hacker with engineering background. I am a graduate of the **A
 
 - Polish - Native speaker
 - English - B2 Upper-Intermediate
+
+![me and hauru testing me new rubber wellingtons](assets/img/looking_cool_with_hauru.png)
+

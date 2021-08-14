@@ -1,7 +1,6 @@
 ---
 title: Home
-subtitle: "Born too late to believe in god and too early to upload own consciousness to the cloud."
-layout: home
+layout: page
 ---
 
 I guess this is it. My personal space in the middle of world
@@ -14,15 +13,13 @@ so I want to take a part in this trend. Also, expect some
 [setters](https://en.wikipedia.org/wiki/Setter) from time
 to time.
 
-My latest post on the blog: "[{{ site.posts[0].title }}]({{ site.posts[0].url }})".
+![proud dog hauru](assets/img/proud_hauru.png)
+
+My latest post on the blog: __"[{{ site.posts[0].title }}]({{ site.posts[0].url }})"__.
 
 If you came here in hope for some collaboration, you're more
 than welcome. Check out [about](/about) page and visit my
 [projects](/projects). This will give you a brief overview
 of my competencies.
 
-Check out my presence in social media by clicking one of the
-icons at the bottom of this page.
-
-I'm truly humbled you came to me, but right now it's time for
-some dogo. Enjoy!
+![me and my friend hauru](assets/img/me_and_hauru.jpg)

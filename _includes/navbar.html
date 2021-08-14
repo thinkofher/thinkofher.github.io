@@ -1,36 +1,13 @@
 <nav>
-  <div class="w3-bar w3-theme-d4">
-    <div class="w3-content shift-nav">
-      <div class="w3-bar-item w3-large w3-hover-text-theme" onclick="window.location='/';">{{ site.title }}</div>
-      <a href="/index" class="w3-bar-item w3-button w3-large w3-hover-theme w3-hide-small">Home</a>
-      <a href="/about" class="w3-bar-item w3-button w3-mobile w3-large w3-hover-theme w3-hide-small">About</a>
-      <a href="/contact" class="w3-bar-item w3-button w3-mobile w3-large w3-hover-theme w3-hide-small">Contact</a>
-      <a href="/blog" class="w3-bar-item w3-button w3-mobile w3-large w3-hover-theme w3-hide-small">Blog</a>
-      <a href="/projects" class="w3-bar-item w3-button w3-mobile w3-large w3-hover-theme w3-hide-small">Projects</a>
-      <a href="https://github.com/thinkofher/thinkofher.github.io" class="w3-bar-item w3-button w3-mobile w3-large w3-right w3-hover-theme w3-hide-small">Source</a>
-      <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="hamburgerMenu()"><i id="hamburger-icon" class="fa fa-bars w3-hover-opacity"></i></a>
-    </div>
-  </div>
-
-  <div id="hamburger" class="w3-bar-block w3-theme-d4 w3-hide w3-hide-large w3-hide-medium">
-    <a href="/index" class="w3-bar-item w3-button w3-hover-theme">Home</a>
-    <a href="/about" class="w3-bar-item w3-button w3-hover-theme">About</a>
-    <a href="/contact" class="w3-bar-item w3-button w3-hover-theme">Contact</a>
-    <a href="/blog" class="w3-bar-item w3-button w3-hover-theme">Blog</a>
-    <a href="/projects" class="w3-bar-item w3-button w3-hover-theme">Projects</a>
-    <a href="https://github.com/thinkofher/thinkofher.github.io" class="w3-bar-item w3-button w3-hover-theme">Source</a>
-  </div>
+  [
+  <a href="/">Home</a>
+  /
+  <a href="/about">About</a>
+  /
+  <a href="/contact">Contact</a>
+  /
+  <a href="/blog">Blog</a>
+  /
+  <a href="/projects">Projects</a>
+  ]
 </nav>
-<script>
-  const hamburgerMenu = () => {
-    var menu = document.getElementById("hamburger");
-    var icon = document.getElementById("hamburger-icon");
-    if (menu.className.indexOf("w3-show") == -1) {
-      menu.className += " w3-show";
-      icon.className = icon.className.replace("fa-bars", "fa-close");
-    } else { 
-      menu.className = menu.className.replace(" w3-show", "");
-      icon.className = icon.className.replace("fa-close", "fa-bars");
-    }
-  }
-</script>

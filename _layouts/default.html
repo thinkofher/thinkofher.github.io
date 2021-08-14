@@ -3,27 +3,17 @@
 
   {% include header.html %}
 
-  <body class="w3-theme-l4">
+  <body>
+    <h1>beniamin@web:~ $</h1>
 
     {% include navbar.html %}
 
     <main>
-      <div class="w3-container w3-theme-d5 w3-bottombar w3-border-theme">
-        <div class="w3-content">
-          <h1 class="w3-text-theme">{{ page.title }}</h1>
-          <h6 class="w3-text-theme"><i>{{ page.subtitle }}</i></h6>
-        </div>
-      </div>
-
-      <section class="w3-container w3-padding">
-        <div class="w3-content">
-          {{ content }}
-        </div>
+      <section>
+        {{ content }}
       </section>
     </main>
 
-
     {% include footer.html %}
-
   </body>
 </html>

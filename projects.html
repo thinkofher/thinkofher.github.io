@@ -1,20 +1,18 @@
 ---
 title: Projects
-subtitle: Literally doing stuff.
 layout: default
 ---
-{% for project in site.data.projects %}
-<section class="w3-panel w3-theme-l3">
-  <a href="{{ project.url }}"><h3>{{ project.name }}</h3></a>
-  <div>
-    {% for tag in project.tags %}
-      <span class="w3-tag">{{ tag }}</span>
-    {% endfor %}
-  </div>
-  <p>{{ project.description }}</p>
+<section >
+  <h2>{{ page.title }}</h2>
+  {% for project in site.data.projects %}
+  <article>
+    <a href="{{ project.url }}"><h3>~/{{ project.name }}</h3></a>
+    <p>{{ project.description }}</p>
+  </article>
+  {% endfor %}
 </section>
-{% endfor %}
 
-<section class="w3-panel">
-  <h4>Check out <a href="{{ site.social.github }}">my github account</a> for more! You can find some gems there.</h4>
+<section>
+  <h3>More</h3>
+  <p>Check out <a href="{{ site.social.github }}">my github account</a> for more! You can find some gems there.</p>
 </section>

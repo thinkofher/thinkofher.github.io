@@ -1,0 +1,76 @@
+@media (prefers-color-scheme: dark) {
+    body {
+        color: $dark-color-text;
+        background-color: $dark-color-bg;
+    }
+
+    hr {
+        border-color: $dark-color-blossom;
+    }
+
+    a {
+        color: $dark-color-blossom;
+
+        &:hover {
+            color: $dark-color-fade;
+            border-bottom: 2px solid $dark-color-text;
+        }
+
+        &:visited {
+            color: darken($dark-color-blossom, 10%);
+        }
+
+    }
+
+    blockquote {
+        border-left: 5px solid $dark-color-blossom;
+        background-color: $dark-color-bg-alt;
+    }
+
+    pre {
+        background-color: $dark-color-bg-alt;
+    }
+
+    code {
+        background-color: $dark-color-bg-alt;
+    }
+
+    td, th {
+        border-bottom: 1px solid $dark-color-bg-alt;
+    }
+
+    input, textarea {
+        border: 1px solid $dark-color-text;
+
+        &:focus {
+            border: 1px solid $dark-color-blossom;
+        }
+    }
+
+    .button, button, input[type="submit"], input[type="reset"], input[type="button"] {
+        background-color: $dark-color-blossom;
+        color: $dark-color-bg;
+        border: 1px solid $dark-color-blossom;
+
+        &:focus:enabled, &:hover:enabled {
+            background-color: $dark-color-fade;
+            border-color: $dark-color-fade;
+            color: $dark-color-bg;
+            outline: 0;
+        }
+    }
+
+    textarea, select, input {
+        color: $dark-color-text;
+        background-color: $dark-color-bg-alt;
+        border: 1px solid $dark-color-bg-alt;
+
+        &:focus {
+            border: 1px solid $dark-color-blossom;
+        }
+    }
+
+    input[type="checkbox"]:focus {
+        outline: 1px dotted $dark-color-blossom;
+    }
+}

@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<!-- some HTML metadata. You can freely omit it -->
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kruskal's Algorithm</title>
+<!-- End of HTML metadata -->
+
+  <!-- Here's the proper program that can be reviewed. -->
+  <!-- It was structured in such way to keep everything as -->
+  <!-- single file that can be downloaded and run locally -->
+  <!-- offline with any browser currently available. -->
+  <script>
+  /*
+   * alg module implements pure algorithms which operates only on
+   * arrays and objects.
+   *
+   * This is the core of the whole project.
+   */
+  const alg = (() => {
+    /*
+     * vert is constructor for single vertex.
+     */
+    function vert(x, y) {
+      return { x, y };
+    }
+
+    /*
+     * edge is constructor for single edge.
+     */
+    function edge(a, b, len) {
+      return { a, b, len };
+    }
+
+    /*
+     * cmpEdge function compares two edges.
+     */
+    function cmpEdge(e1, e2) {
+      return e1.len - e2.len;
+    }
+
+    /*
+     * dist calculates distance between two vertices.
+     */
+    function dist(a, b) {
+      return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
+    }
+
+    /*
+    * kruskal is kruskal's algorithm implementation. It accepts array
+    * of vertices.
+    */
+    function kruskal(vertices) {
+      let colors = [...Array(vertices.length)].map((_, i) => i);
+
+      let edges = [];
+      for (let i = 0; i < vertices.length; i++) {
+        for (let j = i + 1; j < vertices.length; j++) {
+          edges.push(edge(i, j, dist(vertices[i], vertices[j])));
+        }
+      }
+      edges.sort(cmpEdge);
+
+      let counter = 0;
+      let res = [];
+      for (let i = 0; i < edges.length; i++) {
+        let c1 = colors[edges[i].a];
+        let c2 = colors[edges[i].b];
+
+        if (c1 !== c2) {
+          res.push(edges[i]);
+
+          for (let j = 0; j < vertices.length; j++) {
+            if (colors[j] === c2) {
+              colors[j] = c1;
+            }
+          }
+          counter++;
+          if (counter === (vertices.length - 1)) {
+            break;
+          }
+        }
+      }
+
+      return res;
+    }
+
+    /*
+     * treeLength returns length of given tree passed as array of edges.
+     */
+    function treeLength(edges) {
+      return edges.reduce((acc, edge) => acc + edge.len, 0);
+    }
+
+    /*
+     * upperBound return lower bound value for given array of vertices.
+     */
+    function upperBound(vertices) {
+      let edges = kruskal(vertices);
+      if (edges.length <= 0) {
+        return 0;
+      }
+      return 2 * treeLength(edges);
+    }
+
+    /*
+     * lowerBound return lower bound value for given array of vertices.
+     */
+    function lowerBound(vertices) {
+      let dValues = vertices.map((v) => ({
+        /*
+         * Split vertices into array of objects containing
+         * single target vertex and all of the rest vertices.
+         */
+        target: v,
+        rest: vertices.filter((iv) => !(iv.x == v.x && iv.y == v.y)),
+      })).map(({ target, rest }) => {
+        /*
+         * Calculate tree and its length from the vertices excluding target
+         * vertex.
+         */
+        let tree = kruskal(rest);
+        let tLength = treeLength(tree);
+
+        /*
+         * Distances between target vertex and every other one.
+         */
+        let edgesFromTargetLength = rest.map(
+          (v) => dist(target, v),
+        ).sort((a, b) => a - b); /* Sort distances */
+
+        /*
+         * Take two smallest values and add them.
+         */
+        let sumOfTwoShortestEdges = edgesFromTargetLength.slice(0, 2).reduce(
+          (acc, next) => acc + next,
+          0,
+        );
+
+        /*
+         * Return sum of tree length and two smallest distances
+         * (single D value).
+         */
+        return tLength + sumOfTwoShortestEdges;
+      });
+
+      /*
+       * Choose maximum D value.
+       */
+      return Math.max.apply(null, dValues);
+    }
+
+    return {
+      vert,
+      edge,
+      cmpEdge,
+      dist,
+      kruskal,
+      upperBound,
+      lowerBound,
+    };
+  })();
+
+  /*
+   * draw module implements draw routines.
+   */
+  const draw = (() => {
+    /*
+     * circle draws circle on canvas with given context.
+     */
+    function circle(ctx, { x, y, radius, fill, stroke, strokeWidth }) {
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+
+      if (fill) {
+        ctx.fillStyle = fill;
+        ctx.fill();
+      }
+
+      if (stroke) {
+        ctx.lineWidth = strokeWidth;
+        ctx.strokeStyle = stroke;
+        ctx.stroke();
+      }
+    }
+
+    let pointRadius = 10;
+    let pointFill = "#007559";
+    let pointStroke = "#383636";
+    let pointStrokeWidth = 0;
+
+    /*
+     * point draws point on canvas with given context.
+     */
+    function point(ctx, { x, y }, { radius = pointRadius }) {
+      circle(ctx, {
+        x: x,
+        y: y,
+        radius: radius,
+        stroke: pointStroke,
+        fill: pointFill,
+        strokeWidth: pointStrokeWidth,
+      });
+    }
+
+    let lineStroke = "#383636";
+
+    /*
+     * line draws line on canvas with given context.
+     */
+    function line(ctx, from, to, { stroke = "#383636", width = 2 }) {
+      ctx.beginPath();
+      ctx.moveTo(from.x, from.y);
+      ctx.lineTo(to.x, to.y);
+
+      if (width) {
+        ctx.lineWidth = width;
+      }
+      if (stroke) {
+        ctx.strokeStyle = stroke;
+      }
+
+      ctx.stroke();
+    }
+
+    return {
+      circle,
+      point,
+      line,
+    };
+  })();
+
+  /*
+   * Key codes for arrows and space.
+   */
+  const keys = {
+    left: 37,
+    right: 39,
+    up: 38,
+    down: 40,
+    space: 32,
+    minus: 189,
+    plus: 187,
+  };
+
+  /*
+   * parse module implements functions for parsing text input.
+   */
+  const parse = (() => {
+    /*
+     * vert parses single vertex.
+     */
+    function vert(v) {
+      let [x, y] = v.split(",").map((n) => Math.floor(Number(n)));
+      return alg.vert(x, y);
+    }
+
+    /*
+     * input parses whole text input containg vertices.
+     */
+    function input(i) {
+      let lines = i.split("\n");
+      let size = Math.floor(Number(lines[0]));
+      return lines.slice(1).map((v) => parse.vert(v)).slice(0, size);
+    }
+
+    return {
+      vert,
+      input,
+    };
+  })();
+
+  /*
+   * randomFromRange returns integer between start and end.
+   */
+  function randomFromRange(start, end) {
+    start = Math.ceil(start);
+    end = Math.floor(end);
+    return Math.floor(Math.random() * (end - start + 1)) + start;
+  }
+
+  /*
+   * randomVertices returns array of given size with random vertices.
+   */
+  function randomVertices(
+    size,
+    start = { x: 5, y: 5 },
+    end = { x: 100, y: 100 },
+  ) {
+    return Array(size).fill(null).map(() =>
+      alg.vert(
+        randomFromRange(start.x, end.x),
+        randomFromRange(start.y, end.y),
+      )
+    );
+  }
+
+  function verticesToText(vertices) {
+    const vertToStr = (v) => `${v.x}, ${v.y}`;
+    let res = "" + vertices.length + "\n";
+    res += vertices.map(vertToStr).join("\n");
+    return res;
+  }
+
+  function setupListeners() {
+    const kruskalTextInput = document.getElementById("kruskal-text");
+    const kruskalFileInput = document.getElementById("kruskal-file");
+    const kruskalScaleInput = document.getElementById("kruskal-scale");
+    const kruskalRandomButton = document.getElementById("kruskal-random");
+    const kruskalForm = document.querySelector(".kruskal-form");
+    const kruskalUpperBoundValue = document.getElementById("upper-bound");
+    const kruskalLowerBoundValue = document.getElementById("lower-bound");
+    const canvas = document.getElementById("kruskal-canvas");
+
+    let res = {
+      shift: {
+        x: 0,
+        y: 0,
+      },
+      diff: 3,
+      vertices: [],
+      scale: Number(kruskalScaleInput.value),
+      canvas: canvas,
+    };
+
+    const setBounds = async () => {
+      kruskalLowerBoundValue.textContent = "calculating...";
+      kruskalUpperBoundValue.textContent = "calculating...";
+
+      setTimeout(() => {
+        kruskalLowerBoundValue.textContent = alg.lowerBound(res.vertices);
+      }, 100);
+      setTimeout(() => {
+        kruskalUpperBoundValue.textContent = alg.upperBound(res.vertices);
+      }, 100);
+    };
+
+    /*
+     * Setup loading files.
+     */
+    kruskalFileInput.addEventListener("change", async (event) => {
+      let text = await event.target.files[0].text();
+      kruskalTextInput.value = text;
+    });
+
+    const randomVerticesSize = {
+      min: 50,
+      max: 300,
+    };
+    /*
+       * Randomize vertices when user clicks random button.
+     */
+    kruskalRandomButton.addEventListener("click", (event) => {
+      res.vertices = randomVertices(
+        randomFromRange(
+          randomVerticesSize.min,
+          randomVerticesSize.max,
+        ),
+        { x: 5, y: 5 },
+        { x: canvas.width - 5, y: canvas.height - 5 },
+      );
+      kruskalTextInput.value = verticesToText(res.vertices);
+
+      setBounds();
+    });
+
+    /*
+     * Initial value for text input.
+     */
+    kruskalTextInput.value = "4\n10, 21\n13, 5\n11, 17\n18, 3";
+
+    /*
+     * Setup scaling canvas.
+     */
+    kruskalScaleInput.addEventListener("change", (event) => {
+      res.scale = Number(event.target.value);
+    });
+
+    /*
+     * Setup parsing input with textarea node, when user submits form.
+     */
+    kruskalForm.addEventListener("submit", (event) => {
+      try {
+        res.vertices = parse.input(kruskalTextInput.value);
+      } catch (error) {
+        window.alert("Failed to parse input.");
+      }
+      setBounds();
+
+      event.preventDefault();
+    });
+
+    /*
+     * Implement moving around canvas with mouse.
+     */
+    let isDragging = false;
+    let drag = {
+      enabled: false,
+      start: {
+        x: 0,
+        y: 0,
+      },
+    };
+
+    canvas.addEventListener("mousemove", (event) => {
+      if (drag.enabled) {
+        res.shift.x += event.clientX - drag.start.x;
+        res.shift.y += event.clientY - drag.start.y;
+        drag.start.x = event.clientX;
+        drag.start.y = event.clientY;
+      }
+    });
+
+    canvas.addEventListener("mousedown", (event) => {
+      drag.enabled = true;
+      drag.start.x = event.clientX;
+      drag.start.y = event.clientY;
+    });
+
+    canvas.addEventListener("mouseup", (event) => {
+      drag.enabled = false;
+    });
+
+    /*
+     * Setup canvas navigation.
+     */
+    const scaleMinValue = 1;
+    document.addEventListener("keydown", (event) => {
+      switch (event.which) {
+        case keys.left:
+          res.shift.x -= res.diff;
+          break;
+        case keys.right:
+          res.shift.x += res.diff;
+          break;
+        case keys.down:
+          res.shift.y += res.diff;
+          break;
+        case keys.up:
+          res.shift.y -= res.diff;
+          break;
+        case keys.space:
+          res.shift.x = 0;
+          res.shift.y = 0;
+          break;
+        case keys.plus:
+          kruskalScaleInput.value = Number(kruskalScaleInput.value) + 1;
+          res.scale += 1;
+          break;
+        case keys.minus:
+          if (res.scale <= scaleMinValue) {
+            return;
+          }
+          kruskalScaleInput.value -= 1;
+          res.scale -= 1;
+          break;
+      }
+    });
+
+    return res;
+  }
+
+  /*
+   * ready fires given function when document is ready.
+   */
+  function ready(fn) {
+    if (document.readyState != "loading") {
+      fn();
+    } else {
+      document.addEventListener("DOMContentLoaded", fn);
+    }
+  }
+
+  ready(() => {
+    let input = setupListeners();
+
+    const drawFunc = () => {
+      input.canvas.width = input.canvas.clientWidth;
+      input.canvas.height = input.canvas.clientHeight;
+
+      let ctx = input.canvas.getContext("2d");
+
+      let scaledVertices = input.vertices.map((v) =>
+        alg.vert(
+          (v.x + input.shift.x) * input.scale,
+          (v.y + input.shift.y) * input.scale,
+        )
+      );
+      let edges = alg.kruskal(scaledVertices);
+
+      scaledVertices.forEach((v) => {
+        draw.point(ctx, v, { radius: input.scale * 2 });
+      });
+
+      edges.forEach((e) => {
+        draw.line(ctx, scaledVertices[e.a], scaledVertices[e.b], {});
+      });
+
+      window.requestAnimationFrame(drawFunc);
+    };
+
+    drawFunc();
+  });
+  </script>
+  <!-- End of programming part. Everything below is UI part of the project. -->
+
+  <style>
+    html {
+      font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+      background-color: #007559;
+      color: #f7f7eb;
+    }
+
+    a {
+      color: #f7f7fb;
+    }
+
+    body {
+      padding: 2px 2px 2px 2px;
+      max-width: 38em;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .kruskal-form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .kruskal-form div {
+      margin: 5px 2px 5px 2px;
+    }
+
+    .kruskal-form div textarea {
+      width: 100%;
+      height: 10em;
+      background-color: #f7f7eb;
+    }
+
+    #kruskal-canvas {
+      margin-top: 1em;
+      width: 100%;
+      height: 20em;
+      border-style: double;
+      border-color: #383636;
+      background-color: #f7f7eb;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Upper and Lower Bond - Kruskal's Algorithm</h1>
+    <form class="kruskal-form">
+      <div>
+        <legend>
+          <p>
+            Choose file or enter number of points, in one line, and
+            coordinates (separated with comma and new line). Example
+            file was placed in the text area. Feel free to make your
+            changes.
+          </p>
+        </legend>
+      </div>
+
+      <div>
+        <input type="file" id="kruskal-file"></input>
+      </div>
+
+      <div>
+        <textarea id="kruskal-text"></textarea>
+      </div>
+
+      <div>
+        <label for="kruskal-scale">Scale</label>
+        <input type="number" value="1" min="1" id="kruskal-scale">
+      </div>
+
+      <div>
+        <input type="submit" value="Draw"></input>
+      </div>
+
+      <div>
+        <input type="button" value="Random" id="kruskal-random"></input>
+      </div>
+
+    </form>
+    <p>
+      Use <strong>arrow keys</strong> or <strong>mouse</strong> to
+      navigate and <strong>space</strong> to reset position. You can
+      also zoom in and out with <strong>+</strong> and <strong>-</strong>.
+    </p>
+    <canvas id="kruskal-canvas"></canvas>
+    <p>Upper bound: <b id="upper-bound">0</b>.</p>
+    <p>Lower bound: <b id="lower-bound">0</b>.</p>
+  </main>
+  <footer>
+    <p>Project for <b>Advanced Algorithms</b> classes. Author: <a href="https://beniamindudek.xyz">Beniamin Dudek</a>.</p>
+  </footer>
+</body>
+</html>

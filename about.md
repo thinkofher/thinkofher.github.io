@@ -16,8 +16,10 @@ Self-made wannabe hacker with engineering background. I am a graduate of the **A
 
 ### Experience
 
-- Warszawa, Grupa Wirtualna Polska
-    - 03.2021 - now, **Backend Developer**. I became part of the team that is responsible for maintenance of [1login.wp.pl](https://1login.wp.pl/) and [poczta.wp.pl](https://profil.wp.pl/).
+- Poznan, [OLX Group](https://www.olxgroup.com/)
+    - 02.2022 - now, **Software Engineer**. Currently I'm working as Golang Software Enginner at OLX Group. I'm extending functionalities of multiple OLX Real Estate SaaS (for example: [Otodom](https://otodom.pl)), backed by micro-service architecture and AWS serverless solutions.
+- Warszawa, [Grupa Wirtualna Polska](https://holding.wp.pl/en)
+    - 03.2021 - 01.2022, **Backend Developer**. I became part of the team that is responsible for maintenance of [1login.wp.pl](https://1login.wp.pl/) and [poczta.wp.pl](https://profil.wp.pl/).
 - Lodz, Fujitsu Technology Solutions
     - 06.2020 - 02.2021, **R&D Associate Software Developer**. I was mainly developing embedded firmware for Fujitsu Server Primergy and managing infrastructure for development.
     - 01.2020 - 06.2020, **R&D Intern**. Most of the time I was developing suite for automatic functional tests for Fujitsu Redfish API implementation. I started this project from scratch and I was using mostly Python and gauge.
@@ -43,8 +45,8 @@ Self-made wannabe hacker with engineering background. I am a graduate of the **A
 ### Skills
 
 
-| **Programming**   | `Go, Python, Rust, C` |
-| **Tools**         | `Linux, Vim, Git, Bash, Visual Studio Code, Docker, Podman` |
+| **Programming**   | `Go, Python, Rust, C, C++, JavaScript, Lua` |
+| **Tools**         | `Linux, Vim, Git, Zsh, Bash, Docker, Podman, Terraform` |
 | **Technologies**  | `Back-end, Gorilla, Flask, Redis, PostgreSQL` |
 
 ### Languages

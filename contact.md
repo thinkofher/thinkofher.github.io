@@ -18,10 +18,6 @@ can assume I'll read your messages, even if I'm currently away from keyboard.
 You can reach me at [libera.chat](https://libera.chat/). My nickname is `@thinkofher`.
 I spend most of the time at `#hakierspejs` channel. You can join it [here](https://web.libera.chat/#hakierspejs).
 
-### Telegram
-
-Invite link for telegram is [here](https://t.me/thinkofher).
-
 ### Matrix
 
 Invite link for matrix is [here](https://matrix.to/#/@thinkofher:matrix.org).

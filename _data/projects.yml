@@ -12,6 +12,15 @@
       web static files into binary or cross compilation. long-season is also my first
       open-source project with external contributions from other people.
 
+- name: szmaterlok
+  url: https://github.com/fenole/szmaterlok
+  tags: [go, web, sql]
+  description: |
+    Multi user web chat application backed by server-sent events and the
+    sqlite embedded database. It implements event sourcing pattern by using
+    internal single process event queue written from scratch. Everything is
+    packed into the single binary, so it's very easy to deploy.
+
 - name: pazzz
   url: https://github.com/thinkofher/pazzz
   tags: [go, crypto, passwords, cli]

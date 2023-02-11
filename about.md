@@ -22,7 +22,7 @@ broaden my knowledge of programming techniques.
 - Loves minimalist software.
 - Spends most of the time in the terminal emulator.
 - Devoted
-  [vim user](https://github.com/thinkofher/dotfiles/blob/master/.config/nvim/clean.vim).
+  [vim user](https://github.com/thinkofher/dotfiles/blob/main/.config/nvim/init.lua).
 - Can't imagine what the world was like without containers.
 - Thinkpads are the only laptops.
 

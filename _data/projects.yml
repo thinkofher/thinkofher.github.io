@@ -1,4 +1,16 @@
 ---
+- name: okrzeja
+  url: https://code.hauru.club/okrzeja/home
+  tags: [go, web, sql]
+  description: |
+    Okrzeja is HTTP web server with embedded database and interactive web
+    UI with builtin code editor, file manager and administration panel. It is
+    intended to be used by educational facilities in order to make learning web
+    technologies easier by giving students (or anyone interested) proper tool kit.
+    In Okrzeja, every registered user has its own web space, in which they can
+    create HTML, CSS and JS files and store them in nested directories. The files
+    created are publicly available, so users can share their pages with friends, family,
+    teachers, or anyone they want.
 - name: hakierspejs/long-season
   url: https://github.com/hakierspejs/long-season
   tags: [go, web, hackerspace]

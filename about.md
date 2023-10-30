@@ -54,8 +54,9 @@ broaden my knowledge of programming techniques.
 
 ### Education
 
-- 2020 - now, **Computer Science**, _Faculty of Mathematics and Computer
-  Science, University of Lodz_
+- 2020 - 2023, **Computer Science**, _Faculty of Mathematics and Computer
+  Science, University of Lodz_. Thesis: "HTTP server with an embedded database
+  adapted to the needs and goals of IT education"
 
 - 2019, **Computer Science**, _Faculty of Electrical, Electronic, Computer and
   Control Engineering, Lodz University of Technology, Lodz_

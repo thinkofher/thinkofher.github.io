@@ -24,7 +24,7 @@ broaden my knowledge of programming techniques.
 - Devoted
   [vim user](https://github.com/thinkofher/dotfiles/blob/main/.config/nvim/init.lua).
 - Can't imagine what the world was like without containers.
-- Thinkpads are the only laptops.
+- Is obsessed with improving development tools.
 
 ### Experience
 

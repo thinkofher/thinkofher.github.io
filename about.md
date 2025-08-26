@@ -7,15 +7,15 @@ layout: page
 ### Profile
 
 Self-made wannabe hacker with engineering background. I am a graduate of the
-**AGH University of Science and Technology** in Cracow. I am mainly interested
-in web technologies and operating systems from the Linux family. I am an
-enthusiast and an advocate of
-[Free](https://en.wikipedia.org/wiki/Free_software) and
-[Open Source](https://en.wikipedia.org/wiki/Open-source_software) software. I'm
+**AGH University of Science and Technology** in Cracow and *University of
+Lodz*. I am mainly interested in web technologies and operating systems from
+the Linux family. I am an enthusiast and an advocate of
+[Free](https://en.wikipedia.org/wiki/Free_software) and [Open
+Source](https://en.wikipedia.org/wiki/Open-source_software) software. I'm
 highly enjoying using bleeding edge technologies, especially modern programming
-languages such as Go, Python or Rust. In my free time I try to develop my
-private projects (check [my Github profile](https://github.com/thinkofher)!) and
-broaden my knowledge of programming techniques.
+languages such as Go, Rust or Elixir. In my free time I try to develop my
+private projects (check [my Github profile](https://github.com/thinkofher)!)
+and broaden my knowledge of programming techniques.
 
 ### Quick facts
 
@@ -55,8 +55,8 @@ broaden my knowledge of programming techniques.
 ### Education
 
 - 2020 - 2023, **Computer Science**, _Faculty of Mathematics and Computer
-  Science, University of Lodz_. Thesis: "HTTP server with an embedded database
-  adapted to the needs and goals of IT education"
+  Science, University of Lodz_. Thesis: "[HTTP server](https://code.hauru.club/okrzeja)
+  with an embedded database adapted to the needs and goals of IT education"
 
 - 2019, **Computer Science**, _Faculty of Electrical, Electronic, Computer and
   Control Engineering, Lodz University of Technology, Lodz_

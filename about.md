@@ -7,8 +7,8 @@ layout: page
 ### Profile
 
 Self-made wannabe hacker with engineering background. I am a graduate of the
-**AGH University of Science and Technology** in Cracow and *University of
-Lodz*. I am mainly interested in web technologies and operating systems from
+**AGH University of Science and Technology** in Cracow and **University of
+Lodz**. I am mainly interested in web technologies and operating systems from
 the Linux family. I am an enthusiast and an advocate of
 [Free](https://en.wikipedia.org/wiki/Free_software) and [Open
 Source](https://en.wikipedia.org/wiki/Open-source_software) software. I'm

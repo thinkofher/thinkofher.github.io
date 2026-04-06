@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <link
+                rel="stylesheet"
+                href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+                >
+    </head>
+    <body>
+        <nav class="container">
+            <ul>
+                <li><h1>TDS-based Water Recipe</h1></li>
+            </ul>
+        </nav>
+        <main class="container">
+            <form x-data="{
+                          inputTDS: 150,
+                          demineralizedTDS: 0,
+                          targetTDS: 70,
+                          targetVolume: 1.4,
+                          
+                          inputWaterVolume() {
+                            return this.targetVolume * ((this.targetTDS - this.demineralizedTDS) / (this.inputTDS - this.demineralizedTDS));
+                          },
+                          demineralizedWaterVolume() {
+                            return this.targetVolume - this.inputWaterVolume();
+                          },
+                }">
+                <fieldset class="grid">
+                    <label>
+                        Input Water TDS = <strong x-text="inputTDS"></strong>
+                        <input min="50" max="300" step="1" type="range" x-model="inputTDS"/>
+                    </label>
+                    <label>
+                        Demineralized Water TDS = <strong x-text="demineralizedTDS"></strong>
+                        <input min="0" max="30" step="1" type="range" x-model="demineralizedTDS"/>
+                    </label>
+                </fieldset>
+                <label>
+                    Target TDS = <strong x-text="targetTDS"></strong>
+                    <input min="50" max="150" step="1" type="range" x-model="targetTDS"/>
+                </label>
+                <label>
+                    Target Volume (litres)
+                    <input type="number" step="0.1" placeholder="Enter volume" aria-label="Target volume" x-model="targetVolume" @change="console.log(Number(targetVolume) * 2)">
+                </label>
+
+                <fieldset class="grid">
+                    <label>
+                        Input Water Volume
+                        <input
+                                type="number"
+                                x-bind:value="inputWaterVolume"
+                                aria-label="Input Water volume value in litres"
+                                readonly
+                                >
+                    </label>
+                    <label>
+                        Demineralized Water Volume
+                        <input
+                                type="number"
+                                x-bind:value="demineralizedWaterVolume"
+                                aria-label="Demineralized Water Volume value in litres"
+                                readonly
+                                >
+                    </label>
+                </fieldset>
+            </form>
+        </main>
+    </body>
+</html>

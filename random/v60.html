@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#1a1410" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>V60 Recipe</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brew: {
+              50: '#faf6f1',
+              100: '#f0e6d8',
+              200: '#e0c9a8',
+              300: '#c9a87a',
+              400: '#b8894f',
+              500: '#9a6b35',
+              600: '#7c5228',
+              700: '#5c3d1e',
+              800: '#3d2916',
+              900: '#1a1410',
+              950: '#0f0c0a',
+            }
+          },
+          fontFamily: {
+            display: ['"Fraunces"', 'Georgia', 'serif'],
+            sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <style>
+    [x-cloak] { display: none !important; }
+    html { -webkit-tap-highlight-color: transparent; }
+    body {
+      background:
+        radial-gradient(ellipse 120% 80% at 10% -10%, #3d2916 0%, transparent 50%),
+        radial-gradient(ellipse 80% 60% at 100% 20%, #5c3d1e55 0%, transparent 45%),
+        #1a1410;
+      min-height: 100dvh;
+    }
+    .safe-pb { padding-bottom: max(1.5rem, env(safe-area-inset-bottom)); }
+    .safe-pt { padding-top: max(1rem, env(safe-area-inset-top)); }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button { opacity: 1; }
+    .timer-ring {
+      background: conic-gradient(var(--ring, #c9a87a) var(--p, 0%), #3d2916 0);
+      transition: none;
+    }
+    .timer-ring.is-pour {
+      --ring: #e8c48a;
+      box-shadow: 0 0 0 1px #c9a87a55, 0 0 28px #c9a87a33;
+    }
+    .timer-ring.is-rest {
+      --ring: #6b5340;
+    }
+    .total-beam {
+      height: 6px;
+      border-radius: 999px;
+      background: #3d2916;
+      overflow: hidden;
+    }
+    .total-beam > span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #9a6b35, #c9a87a);
+    }
+    @keyframes pulse-soft {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.65; }
+    }
+    .animate-pulse-soft { animation: pulse-soft 1.4s ease-in-out infinite; }
+    @keyframes pour-glow {
+      0%, 100% { box-shadow: 0 0 0 0 #e8c48a55; }
+      50% { box-shadow: 0 0 0 8px #e8c48a00; }
+    }
+    .pour-callout {
+      animation: pour-glow 1.6s ease-in-out infinite;
+    }
+    @media (max-height: 700px) {
+      .timer-circle { width: 10.5rem; height: 10.5rem; }
+      .timer-circle .timer-digits { font-size: 2.5rem; line-height: 1; }
+      .timer-main { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+      .timer-beam { margin-top: 0.75rem; }
+      .timer-copy { margin-top: 0; }
+      .timer-copy .now-label { margin-bottom: 0.25rem; }
+      .timer-copy .step-title { font-size: 1.25rem; margin-bottom: 0.25rem; }
+      .timer-copy .step-detail { font-size: 0.875rem; min-height: 0; }
+      .timer-callout { margin-top: 0.75rem; padding: 0.75rem 1rem; }
+      .timer-callout .callout-ml { font-size: 1.75rem; }
+      .timer-callout .callout-sub { display: none; }
+    }
+  </style>
+</head>
+<body class="font-sans text-brew-50 antialiased" x-data="v60App()" x-cloak :lang="lang">
+  <!-- Editor -->
+  <div x-show="!timerActive" class="min-h-dvh safe-pt safe-pb px-4 sm:px-6 max-w-lg mx-auto">
+    <header class="pt-6 pb-5">
+      <div class="flex items-start justify-between gap-3 mb-1">
+        <p class="text-brew-300 text-xs font-medium tracking-[0.2em] uppercase" x-text="t('eyebrow')"></p>
+        <div class="flex rounded-lg border border-brew-600/50 overflow-hidden shrink-0" role="group" :aria-label="t('language')">
+          <button
+            type="button"
+            @click="setLang('en')"
+            class="px-2.5 py-1 text-[11px] font-semibold tracking-wide"
+            :class="lang === 'en' ? 'bg-brew-300 text-brew-900' : 'bg-brew-900/60 text-brew-300'"
+          >EN</button>
+          <button
+            type="button"
+            @click="setLang('pl')"
+            class="px-2.5 py-1 text-[11px] font-semibold tracking-wide"
+            :class="lang === 'pl' ? 'bg-brew-300 text-brew-900' : 'bg-brew-900/60 text-brew-300'"
+          >PL</button>
+        </div>
+      </div>
+      <h1 class="font-display text-3xl sm:text-4xl font-semibold tracking-tight text-brew-50" x-text="t('title')"></h1>
+      <p class="mt-1.5 text-brew-200/80 text-sm" x-text="t('subtitle')"></p>
+    </header>
+
+    <!-- Ratio -->
+    <section class="rounded-2xl bg-brew-800/60 border border-brew-700/50 p-4 mb-3 backdrop-blur">
+      <div class="flex items-center justify-between mb-3">
+        <label class="text-sm font-medium text-brew-100" x-text="t('coffeeWater')"></label>
+        <span class="text-xs text-brew-300 tabular-nums" x-text="ratioLabel"></span>
+      </div>
+      <div class="flex flex-wrap gap-2 mb-3">
+        <template x-for="preset in ratioPresets" :key="preset.id">
+          <button
+            type="button"
+            @click="setRatio(preset.value)"
+            :class="Math.abs(ratio - preset.value) < 0.01
+              ? 'bg-brew-300 text-brew-900 border-brew-300'
+              : 'bg-brew-900/50 text-brew-100 border-brew-600/60 hover:border-brew-400'"
+            class="px-3 py-2 rounded-xl text-xs font-medium border transition active:scale-95"
+            x-text="preset.label"
+          ></button>
+        </template>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-brew-300 text-sm shrink-0">1 :</span>
+        <input
+          type="number"
+          inputmode="decimal"
+          step="0.1"
+          min="10"
+          max="20"
+          x-model.number="ratioInput"
+          @input="onRatioInput"
+          class="w-full rounded-xl bg-brew-900/70 border border-brew-600/50 px-3 py-2.5 text-brew-50 text-lg tabular-nums focus:outline-none focus:ring-2 focus:ring-brew-400/40"
+        />
+        <span class="text-brew-300 text-xs shrink-0 whitespace-nowrap" x-text="t('gPer100', { g: gramsPer100 })"></span>
+      </div>
+    </section>
+
+    <!-- Coffee & Water -->
+    <section class="grid grid-cols-2 gap-3 mb-3">
+      <div class="rounded-2xl bg-brew-800/60 border border-brew-700/50 p-4 backdrop-blur">
+        <label class="text-sm font-medium text-brew-100 block mb-2" x-text="t('coffee')"></label>
+        <div class="flex items-end gap-1">
+          <input
+            type="number"
+            inputmode="decimal"
+            step="0.1"
+            min="5"
+            max="60"
+            x-model.number="coffee"
+            @input="onCoffeeInput"
+            class="w-full rounded-xl bg-brew-900/70 border border-brew-600/50 px-3 py-2.5 text-brew-50 text-2xl font-semibold tabular-nums focus:outline-none focus:ring-2 focus:ring-brew-400/40"
+          />
+          <span class="text-brew-300 text-sm pb-3 shrink-0">g</span>
+        </div>
+        <div class="flex gap-2 mt-3">
+          <button type="button" @click="nudgeCoffee(-1)" class="flex-1 py-2 rounded-lg bg-brew-900/60 border border-brew-600/40 text-brew-200 text-sm active:scale-95">−1</button>
+          <button type="button" @click="nudgeCoffee(1)" class="flex-1 py-2 rounded-lg bg-brew-900/60 border border-brew-600/40 text-brew-200 text-sm active:scale-95">+1</button>
+        </div>
+      </div>
+      <div class="rounded-2xl bg-brew-800/60 border border-brew-700/50 p-4 backdrop-blur">
+        <label class="text-sm font-medium text-brew-100 block mb-2" x-text="t('water')"></label>
+        <div class="flex items-end gap-1">
+          <input
+            type="number"
+            inputmode="decimal"
+            step="1"
+            min="80"
+            max="1000"
+            x-model.number="water"
+            @input="onWaterInput"
+            class="w-full rounded-xl bg-brew-900/70 border border-brew-600/50 px-3 py-2.5 text-brew-50 text-2xl font-semibold tabular-nums focus:outline-none focus:ring-2 focus:ring-brew-400/40"
+          />
+          <span class="text-brew-300 text-sm pb-3 shrink-0">ml</span>
+        </div>
+        <div class="flex gap-2 mt-3">
+          <button type="button" @click="nudgeWater(-10)" class="flex-1 py-2 rounded-lg bg-brew-900/60 border border-brew-600/40 text-brew-200 text-sm active:scale-95">−10</button>
+          <button type="button" @click="nudgeWater(10)" class="flex-1 py-2 rounded-lg bg-brew-900/60 border border-brew-600/40 text-brew-200 text-sm active:scale-95">+10</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recipe badge + grind -->
+    <section class="rounded-2xl bg-brew-800/60 border border-brew-700/50 p-4 mb-3 backdrop-blur">
+      <div class="flex items-start justify-between gap-3 mb-4">
+        <div>
+          <p class="text-xs text-brew-300 uppercase tracking-wider mb-1" x-text="t('recipe')"></p>
+          <p class="font-display text-xl font-semibold text-brew-50" x-text="isOneCup ? t('oneCup') : t('twoCup')"></p>
+          <p class="text-sm text-brew-200/80 mt-0.5" x-text="isOneCup ? t('oneCupMethod') : t('twoCupMethod')"></p>
+        </div>
+        <div class="rounded-full px-3 py-1 text-xs font-medium"
+             :class="isOneCup ? 'bg-brew-600/40 text-brew-100' : 'bg-brew-500/30 text-brew-100'">
+          <span x-text="isOneCup ? '≤ 300 ml' : '> 300 ml'"></span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div class="rounded-xl bg-brew-900/50 border border-brew-700/40 p-3">
+          <p class="text-[11px] text-brew-300 uppercase tracking-wider mb-1">Comandante C40</p>
+          <p class="font-display text-2xl font-semibold text-brew-100 tabular-nums">
+            <span x-text="grind.c40"></span>
+            <span class="text-sm font-sans font-normal text-brew-300" x-text="t('clicks')"></span>
+          </p>
+        </div>
+        <div class="rounded-xl bg-brew-900/50 border border-brew-700/40 p-3">
+          <p class="text-[11px] text-brew-300 uppercase tracking-wider mb-1">1Zpresso ZP6</p>
+          <p class="font-display text-2xl font-semibold text-brew-100 tabular-nums">
+            <span x-text="grind.zp6"></span>
+          </p>
+        </div>
+        <div class="rounded-xl bg-brew-900/50 border border-brew-700/40 p-3">
+          <p class="text-[11px] text-brew-300 uppercase tracking-wider mb-1">Timemore C5 Pro</p>
+          <p class="font-display text-2xl font-semibold text-brew-100 tabular-nums">
+            <span x-text="grind.c5"></span>
+          </p>
+        </div>
+        <div class="rounded-xl bg-brew-900/50 border border-brew-700/40 p-3">
+          <p class="text-[11px] text-brew-300 uppercase tracking-wider mb-1">Fellow Ode Gen 2</p>
+          <p class="font-display text-2xl font-semibold text-brew-100 tabular-nums">
+            <span x-text="grind.ode"></span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <button
+      type="button"
+      @click="startTimer()"
+      class="w-full py-4 rounded-2xl bg-brew-300 text-brew-900 font-semibold text-lg shadow-lg shadow-brew-950/40 active:scale-[0.98] transition mb-6"
+      x-text="t('startBrew')"
+    ></button>
+
+    <section class="pb-8">
+      <h2 class="font-display text-lg font-semibold text-brew-100 mb-3" x-text="t('brewSteps')"></h2>
+      <ol class="space-y-2">
+        <template x-for="(step, i) in steps" :key="i + '-' + lang">
+          <li
+            class="rounded-xl p-3.5 flex gap-3 border"
+            :class="step.pour
+              ? 'bg-brew-600/25 border-brew-300/50'
+              : 'bg-brew-800/40 border-brew-700/40'"
+          >
+            <div class="shrink-0 w-12 text-center">
+              <p class="text-xs tabular-nums" :class="step.pour ? 'text-brew-200' : 'text-brew-400'" x-text="formatTime(step.at)"></p>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-2 flex-wrap">
+                <p class="font-medium text-sm" :class="step.pour ? 'text-brew-50' : 'text-brew-100/90'" x-text="step.title"></p>
+                <span
+                  x-show="step.pour"
+                  class="text-[10px] font-bold tracking-wider uppercase px-1.5 py-0.5 rounded bg-brew-300 text-brew-900"
+                  x-text="t('kind.pour')"
+                ></span>
+                <span
+                  x-show="!step.pour"
+                  class="text-[10px] font-medium tracking-wider uppercase px-1.5 py-0.5 rounded bg-brew-900/70 text-brew-400 border border-brew-700/50"
+                  x-text="kindLabel(step.kind)"
+                ></span>
+              </div>
+              <p class="text-sm mt-0.5" :class="step.pour ? 'text-brew-100/90' : 'text-brew-200/75'" x-text="step.detail"></p>
+              <p x-show="step.target != null" class="text-xs mt-1.5 tabular-nums font-medium"
+                 :class="step.pour ? 'text-brew-200' : 'text-brew-300'">
+                <span x-text="step.pour ? t('pourTo') : t('scale')"></span>
+                · <span x-text="step.target"></span> ml
+              </p>
+            </div>
+          </li>
+        </template>
+      </ol>
+      <p class="mt-4 text-xs text-brew-400/90 leading-relaxed" x-text="t('prepTip')"></p>
+    </section>
+  </div>
+
+  <!-- Fullscreen timer -->
+  <div
+    x-show="timerActive"
+    x-transition.opacity
+    class="fixed inset-0 z-50 bg-brew-950 flex flex-col safe-pt"
+    @keydown.escape.window="cancelTimer()"
+  >
+    <div class="grid grid-cols-3 items-center gap-2 px-4 py-2 shrink-0">
+      <button
+        type="button"
+        @click="cancelTimer()"
+        class="justify-self-start min-w-[5.5rem] px-3 py-2.5 rounded-xl bg-brew-800/80 border border-brew-600/50 text-brew-100 text-sm font-medium text-center active:scale-95"
+        x-text="t('cancel')"
+      ></button>
+      <p class="text-xs text-brew-300 uppercase tracking-wider text-center" x-text="isOneCup ? t('oneCupShort') : t('twoCupShort')"></p>
+      <button
+        type="button"
+        @click="togglePause()"
+        class="justify-self-end min-w-[5.5rem] px-3 py-2.5 rounded-xl border text-sm font-medium text-center active:scale-95"
+        :class="paused
+          ? 'bg-brew-300 text-brew-900 border-brew-300'
+          : 'bg-brew-800/80 text-brew-100 border-brew-600/50'"
+        x-text="paused ? t('resume') : t('pause')"
+      ></button>
+    </div>
+
+    <div class="timer-main flex-1 min-h-0 overflow-y-auto overscroll-contain flex flex-col items-center justify-center px-5">
+      <div class="flex flex-col items-center">
+        <div
+          class="timer-circle relative w-56 h-56 sm:w-64 sm:h-64 rounded-full timer-ring p-1.5"
+          :class="currentStep?.pour ? 'is-pour' : 'is-rest'"
+          :style="'--p:' + stepProgressPercent + '%'"
+        >
+          <div class="w-full h-full rounded-full bg-brew-950 flex flex-col items-center justify-center">
+            <p
+              class="text-[11px] uppercase tracking-[0.18em] mb-1 font-semibold"
+              :class="currentStep?.pour ? 'text-brew-300' : 'text-brew-500'"
+              x-text="currentStep?.pour ? t('kind.pour') : (currentStep ? kindLabel(currentStep.kind) : t('done'))"
+            ></p>
+            <p
+              class="timer-digits font-display text-5xl sm:text-6xl font-semibold tabular-nums tracking-tight"
+              :class="paused ? 'text-brew-400 animate-pulse-soft' : (currentStep?.pour ? 'text-brew-100' : 'text-brew-50')"
+              x-text="formatTime(stepRemaining)"
+            ></p>
+            <p class="text-brew-400 text-xs mt-1 tabular-nums" x-text="formatTime(stepDuration) + ' ' + t('step')"></p>
+          </div>
+        </div>
+
+        <div class="timer-beam mt-5 flex flex-col items-center gap-1.5 w-28 sm:w-32">
+          <div class="total-beam w-full" :aria-valuenow="totalProgressPercent" role="progressbar" :aria-label="t('totalBrew')">
+            <span :style="'width:' + totalProgressPercent + '%'"></span>
+          </div>
+          <p class="text-[11px] text-brew-400 tabular-nums">
+            <span x-text="formatTime(elapsed)"></span>
+            <span class="text-brew-600"> / </span>
+            <span x-text="formatTime(totalDuration)"></span>
+          </p>
+        </div>
+      </div>
+
+      <div class="timer-copy w-full max-w-sm text-center mt-6">
+        <p class="now-label text-brew-400 text-xs uppercase tracking-[0.15em] mb-2" x-text="t('now')"></p>
+        <p
+          class="step-title font-display text-2xl sm:text-3xl font-semibold mb-2"
+          :class="currentStep?.pour ? 'text-brew-100' : 'text-brew-200'"
+          x-text="currentStep ? currentStep.title : t('done')"
+        ></p>
+        <p
+          class="step-detail text-base leading-snug min-h-[2.5rem]"
+          :class="currentStep?.pour ? 'text-brew-100/90' : 'text-brew-300'"
+          x-text="currentStep ? currentStep.detail : t('enjoy')"
+        ></p>
+
+        <div
+          x-show="currentStep && currentStep.target != null"
+          class="timer-callout mt-4 mx-auto max-w-xs rounded-2xl px-5 py-4 border"
+          :class="currentStep?.pour
+            ? 'pour-callout bg-brew-300 text-brew-900 border-brew-200'
+            : 'bg-brew-800/90 text-brew-100 border-brew-600/60'"
+        >
+          <p
+            class="text-[11px] font-bold uppercase tracking-[0.18em] mb-1"
+            :class="currentStep?.pour ? 'text-brew-800/80' : 'text-brew-400'"
+            x-text="currentStep?.pour ? t('pourNow') : t('holdScale')"
+          ></p>
+          <p class="callout-ml font-display text-3xl font-semibold tabular-nums leading-none">
+            <span x-text="currentStep?.target"></span>
+            <span class="text-lg font-sans font-medium opacity-80">ml</span>
+          </p>
+          <p
+            class="callout-sub text-sm mt-1.5 font-medium"
+            :class="currentStep?.pour ? 'text-brew-800' : 'text-brew-300'"
+            x-text="currentStep?.pour
+              ? t('pourUpTo', { ml: currentStep.target })
+              : t('stayAt', { ml: currentStep.target })"
+          ></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="shrink-0 px-4 pt-2 border-t border-brew-800/80 bg-brew-950" style="padding-bottom: max(0.75rem, env(safe-area-inset-bottom));">
+      <button
+        type="button"
+        x-show="currentStep"
+        @click="skipStep()"
+        class="w-full py-3.5 rounded-xl border border-brew-600/60 bg-brew-900 text-brew-100 text-sm font-semibold tracking-wide active:scale-[0.98]"
+        x-text="t('skipStep')"
+      ></button>
+      <div x-show="!currentStep" class="py-3.5 text-center text-sm text-brew-400" x-text="t('brewComplete')"></div>
+    </div>
+  </div>
+
+  <script>
+    const I18N = {
+      en: {
+        language: 'Language',
+        eyebrow: 'Pour-over',
+        title: 'V60 Recipe',
+        subtitle: 'James Hoffmann · scale the recipe & brew',
+        coffeeWater: 'Coffee : water',
+        gPer100: '{g} g / 100 ml',
+        coffee: 'Coffee',
+        water: 'Water',
+        recipe: 'Recipe',
+        oneCup: 'V60 · One cup',
+        twoCup: 'V60 · Two cup',
+        oneCupShort: 'One cup',
+        twoCupShort: 'Two cup',
+        oneCupMethod: 'Hoffmann pulse pours',
+        twoCupMethod: 'Hoffmann 60% / 100%',
+        clicks: 'clicks',
+        startBrew: 'Start brew',
+        brewSteps: 'Brew steps',
+        pourTo: 'Pour to',
+        scale: 'Scale',
+        prepTip: 'Prep: rinse filter, preheat dripper, add coffee, dig a small well. Water just off the boil for light roasts. Drawdown variance is normal — taste decides.',
+        cancel: 'Cancel',
+        pause: 'Pause',
+        resume: 'Resume',
+        step: 'step',
+        totalBrew: 'Total brew',
+        now: 'Now',
+        done: 'Done',
+        enjoy: 'Enjoy your coffee.',
+        pourNow: 'Pour now',
+        holdScale: 'Hold · scale reading',
+        pourUpTo: 'Pour up to {ml} ml',
+        stayAt: 'Stay at {ml} ml — do not pour',
+        skipStep: 'Skip step',
+        brewComplete: 'Brew complete',
+        'kind.pour': 'Pour',
+        'kind.hold': 'Hold',
+        'kind.swirl': 'Swirl',
+        'kind.stir': 'Stir',
+        'kind.drawdown': 'Drawdown',
+        'kind.rest': 'Rest',
+        'step.bloom': 'Bloom',
+        'step.swirlBloom': 'Swirl bloom',
+        'step.pour40': 'Pour · 40%',
+        'step.pour60': 'Pour · 60%',
+        'step.pour80': 'Pour · 80%',
+        'step.pour100': 'Pour · 100%',
+        'step.pause': 'Pause',
+        'step.swirl': 'Swirl',
+        'step.drawdown': 'Drawdown',
+        'step.main60': 'Main pour · 60%',
+        'step.finish100': 'Finish pour · 100%',
+        'step.stir': 'Stir',
+        'detail.bloom1': 'Pour {ml} ml to wet all grounds evenly.',
+        'detail.swirlBloom': 'Gentle swirl so the slurry looks even.',
+        'detail.pour40': 'Slow circles up to {ml} ml.',
+        'detail.pauseHold': 'Let the bed settle. Keep scale at {ml} ml.',
+        'detail.pour60': 'Pulse pour to {ml} ml.',
+        'detail.pauseShort': 'Short rest. Keep scale at {ml} ml.',
+        'detail.pour80': 'Pulse pour to {ml} ml.',
+        'detail.pour100': 'Final pulse to {ml} ml.',
+        'detail.swirl': 'Gentle swirl to flatten the bed.',
+        'detail.drawdown1': 'Aim to finish around 3:00. Taste is the judge.',
+        'detail.bloom2': 'Pour {ml} ml (≈2× coffee). Saturate evenly.',
+        'detail.swirlBloom2': 'Circular swirl until slurry is smooth.',
+        'detail.main60': 'Continuous pour to {ml} ml by 1:15.',
+        'detail.finish100': 'Gentler pour to {ml} ml by 1:45.',
+        'detail.stir': 'One gentle stir. Scale stays at {ml} ml.',
+        'detail.swirl2': 'Swirl to level the bed. Scale at {ml} ml.',
+        'detail.drawdown2': 'Target finish around 3:00–3:30.',
+      },
+      pl: {
+        language: 'Język',
+        eyebrow: 'Przelew',
+        title: 'Przepis V60',
+        subtitle: 'James Hoffmann · skaluj przepis i zaparz',
+        coffeeWater: 'Kawa : woda',
+        gPer100: '{g} g / 100 ml',
+        coffee: 'Kawa',
+        water: 'Woda',
+        recipe: 'Przepis',
+        oneCup: 'V60 · Jedna filiżanka',
+        twoCup: 'V60 · Dwie filiżanki',
+        oneCupShort: '1 filiżanka',
+        twoCupShort: '2 filiżanki',
+        oneCupMethod: 'Hoffmann — pulsacyjne wlewanie',
+        twoCupMethod: 'Hoffmann 60% / 100%',
+        clicks: 'klików',
+        startBrew: 'Zacznij parzenie',
+        brewSteps: 'Kroki parzenia',
+        pourTo: 'Wlej do',
+        scale: 'Na wadze',
+        prepTip: 'Przygotowanie: spłucz filtr, rozgrzej dripera, wsyp kawę, zrób małe zagłębienie. Woda tuż po zagotowaniu przy jasnych paleniach. Czas ściekania bywa różny — decyduje smak.',
+        cancel: 'Anuluj',
+        pause: 'Pauza',
+        resume: 'Wznów',
+        step: 'krok',
+        totalBrew: 'Całe parzenie',
+        now: 'Teraz',
+        done: 'Gotowe',
+        enjoy: 'Smacznego.',
+        pourNow: 'Wlewaj',
+        holdScale: 'Czekaj · na wadze',
+        pourUpTo: 'Wlej do {ml} ml',
+        stayAt: 'Zostań na {ml} ml — nie wlewaj',
+        skipStep: 'Pomiń krok',
+        brewComplete: 'Parzenie zakończone',
+        'kind.pour': 'Wlewanie',
+        'kind.hold': 'Czekaj',
+        'kind.swirl': 'Zakręć',
+        'kind.stir': 'Zamieszaj',
+        'kind.drawdown': 'Ściekanie',
+        'kind.rest': 'Przerwa',
+        'step.bloom': 'Bloom',
+        'step.swirlBloom': 'Zakręć (bloom)',
+        'step.pour40': 'Wlewanie · 40%',
+        'step.pour60': 'Wlewanie · 60%',
+        'step.pour80': 'Wlewanie · 80%',
+        'step.pour100': 'Wlewanie · 100%',
+        'step.pause': 'Pauza',
+        'step.swirl': 'Zakręć',
+        'step.drawdown': 'Ściekanie',
+        'step.main60': 'Główne wlewanie · 60%',
+        'step.finish100': 'Końcowe wlewanie · 100%',
+        'step.stir': 'Zamieszaj',
+        'detail.bloom1': 'Wlej {ml} ml, żeby równomiernie zmoczyć kawę.',
+        'detail.swirlBloom': 'Delikatnie zakręć, aż papka będzie równa.',
+        'detail.pour40': 'Powoli, kółkami do {ml} ml.',
+        'detail.pauseHold': 'Pozwól kawie osiąść. Na wadze: {ml} ml.',
+        'detail.pour60': 'Pulsacyjnie wlej do {ml} ml.',
+        'detail.pauseShort': 'Krótka przerwa. Na wadze: {ml} ml.',
+        'detail.pour80': 'Pulsacyjnie wlej do {ml} ml.',
+        'detail.pour100': 'Ostatni puls do {ml} ml.',
+        'detail.swirl': 'Delikatnie zakręć, żeby wypłaszczyć warstwę.',
+        'detail.drawdown1': 'Celuj w koniec koło 3:00. Smak decyduje.',
+        'detail.bloom2': 'Wlej {ml} ml (≈2× kawa). Równomiernie namocz.',
+        'detail.swirlBloom2': 'Zakręć w kółko, aż papka będzie gładka.',
+        'detail.main60': 'Ciągle wlewaj do {ml} ml do 1:15.',
+        'detail.finish100': 'Łagodniej wlej do {ml} ml do 1:45.',
+        'detail.stir': 'Jedno delikatne zamieszanie. Na wadze: {ml} ml.',
+        'detail.swirl2': 'Zakręć, żeby wypoziomować warstwę. Na wadze: {ml} ml.',
+        'detail.drawdown2': 'Celuj w koniec koło 3:00–3:30.',
+      },
+
+    };
+
+    function v60App() {
+      return {
+        lang: Alpine.$persist('en').as('v60-lang'),
+        ratio: Alpine.$persist(16.67).as('v60-ratio'),
+        ratioInput: Alpine.$persist(16.7).as('v60-ratio-input'),
+        coffee: Alpine.$persist(15).as('v60-coffee'),
+        water: Alpine.$persist(250).as('v60-water'),
+        lastEdited: Alpine.$persist('coffee').as('v60-last-edited'),
+        timerActive: false,
+        paused: false,
+        elapsed: 0,
+        _raf: null,
+        _lastTick: 0,
+        _elapsedMs: 0,
+
+        ratioPresets: [
+          { id: '1:15', label: '1:15', value: 15 },
+          { id: '1:16', label: '1:16', value: 16 },
+          { id: '1:16.7', label: '1:16.7', value: 16.67 },
+          { id: '6g', label: '6 g/100', value: 100 / 6 },
+          { id: '6.5g', label: '6.5 g/100', value: 100 / 6.5 },
+          { id: '7g', label: '7 g/100', value: 100 / 7 },
+        ],
+
+        init() {
+          // Keep linked fields coherent after restore
+          if (!this.ratio || this.ratio < 8 || this.ratio > 25) this.ratio = 16.67;
+          if (!this.coffee || this.coffee < 1) this.coffee = 15;
+          if (!this.water || this.water < 1) this.water = 250;
+          if (this.lang !== 'en' && this.lang !== 'pl') this.lang = 'en';
+          if (this.lastEdited !== 'coffee' && this.lastEdited !== 'water') this.lastEdited = 'coffee';
+          this.ratioInput = this.round(this.ratio, 2);
+
+          document.documentElement.lang = this.lang;
+          document.title = this.t('title');
+          this.$watch('lang', () => {
+            document.documentElement.lang = this.lang;
+            document.title = this.t('title');
+          });
+        },
+
+        t(key, vars = {}) {
+          const dict = I18N[this.lang] || I18N.en;
+          let s = dict[key] ?? I18N.en[key] ?? key;
+          for (const [k, v] of Object.entries(vars)) {
+            s = s.replaceAll(`{${k}}`, String(v));
+          }
+          return s;
+        },
+
+        setLang(code) {
+          if (code !== 'en' && code !== 'pl') return;
+          this.lang = code;
+        },
+
+
+        kindLabel(kind) {
+          return this.t(`kind.${kind || 'rest'}`);
+        },
+
+        get gramsPer100() {
+          return (100 / this.ratio).toFixed(1);
+        },
+
+        get ratioLabel() {
+          return `1:${this.round(this.ratio, 2)} · ${this.t('gPer100', { g: this.gramsPer100 })}`;
+        },
+
+        get isOneCup() {
+          return this.water <= 300;
+        },
+
+        get grind() {
+          const doseFactor = (this.coffee - 15) / 15;
+          const strength = 16.67 / this.ratio;
+          let c40 = 20.5 + doseFactor * 2 - (strength - 1) * 1.5;
+          c40 = Math.round(Math.min(26, Math.max(18, c40)));
+
+          let zp6Clicks = 43 + doseFactor * 7 - (strength - 1) * 4;
+          zp6Clicks = Math.round(Math.min(60, Math.max(35, zp6Clicks)));
+          const major = Math.floor(zp6Clicks / 10);
+          const minor = zp6Clicks % 10;
+          const zp6 = `${major}.${minor}`;
+
+          // Timemore C5 Pro dial: N.0 → N.1 → N.2 → (N+1).0 (2 clicks between whole numbers)
+          // V60 typically ~7.0–11.2; baseline ~9.0 for 15 g
+          let c5Steps = 27 + doseFactor * 3 - (strength - 1) * 2; // 27 = 9.0
+          c5Steps = Math.round(Math.min(34, Math.max(21, c5Steps))); // 7.0 … 11.1
+          const c5Major = Math.floor(c5Steps / 3);
+          const c5Minor = c5Steps % 3;
+          const c5 = `${c5Major}.${c5Minor}`;
+
+          // Fellow Ode Gen 2: dial 1–11, 3 sub-steps between numbers → N.0 … N.3
+          // Pour-over ~4–8; Fellow V60 start ~5; community often ~5–6
+          let odeSteps = 21 + doseFactor * 2 - (strength - 1) * 1.5; // 21 = 5.1
+          odeSteps = Math.round(Math.min(32, Math.max(16, odeSteps))); // 4.0 … 8.0
+          const odeMajor = Math.floor(odeSteps / 4);
+          const odeMinor = odeSteps % 4;
+          const ode = `${odeMajor}.${odeMinor}`;
+
+          return { c40, zp6, c5, ode };
+        },
+
+
+
+
+
+        get steps() {
+          // touch this.lang so Alpine re-renders steps on language change
+          void this.lang;
+          return this.isOneCup ? this.oneCupSteps() : this.twoCupSteps();
+        },
+
+        get totalDuration() {
+          const s = this.steps;
+          return s.length ? s[s.length - 1].at + (s[s.length - 1].hold || 30) : 180;
+        },
+
+        get currentStepIndex() {
+          const s = this.steps;
+          if (!s.length || this.elapsed >= this.totalDuration) return -1;
+          let idx = 0;
+          for (let i = 0; i < s.length; i++) {
+            if (this.elapsed >= s[i].at) idx = i;
+            else break;
+          }
+          return idx;
+        },
+
+        get currentStep() {
+          const i = this.currentStepIndex;
+          return i < 0 ? null : this.steps[i];
+        },
+
+        get stepDuration() {
+          const s = this.steps;
+          const i = this.currentStepIndex;
+          if (i < 0) return 0;
+          const start = s[i].at;
+          const end = i + 1 < s.length ? s[i + 1].at : start + (s[i].hold || 30);
+          return Math.max(0.001, end - start);
+        },
+
+        get stepElapsed() {
+          const step = this.currentStep;
+          if (!step) return 0;
+          return Math.min(this.stepDuration, Math.max(0, this.elapsed - step.at));
+        },
+
+        get stepRemaining() {
+          if (!this.currentStep) return 0;
+          return Math.max(0, this.stepDuration - this.stepElapsed);
+        },
+
+        get stepProgressPercent() {
+          if (!this.currentStep) return 100;
+          return Math.min(100, (this.stepElapsed / this.stepDuration) * 100);
+        },
+
+        get totalProgressPercent() {
+          if (!this.totalDuration) return 0;
+          return Math.min(100, (this.elapsed / this.totalDuration) * 100);
+        },
+
+        round(n, d = 1) {
+          const f = 10 ** d;
+          return Math.round(n * f) / f;
+        },
+
+        syncFromCoffee() {
+          this.water = this.round(this.coffee * this.ratio, 0);
+        },
+
+        syncFromWater() {
+          this.coffee = this.round(this.water / this.ratio, 1);
+        },
+
+        setRatio(value) {
+          this.ratio = value;
+          this.ratioInput = this.round(value, 2);
+          if (this.lastEdited === 'water') this.syncFromWater();
+          else this.syncFromCoffee();
+        },
+
+        onRatioInput() {
+          const v = Number(this.ratioInput);
+          if (!v || v < 8 || v > 25) return;
+          this.ratio = v;
+          if (this.lastEdited === 'water') this.syncFromWater();
+          else this.syncFromCoffee();
+        },
+
+        onCoffeeInput() {
+          this.lastEdited = 'coffee';
+          const v = Number(this.coffee);
+          if (!v || v < 1) return;
+          this.syncFromCoffee();
+        },
+
+        onWaterInput() {
+          this.lastEdited = 'water';
+          const v = Number(this.water);
+          if (!v || v < 1) return;
+          this.syncFromWater();
+        },
+
+        nudgeCoffee(d) {
+          this.coffee = this.round(Math.max(5, Math.min(60, Number(this.coffee) + d)), 1);
+          this.onCoffeeInput();
+        },
+
+        nudgeWater(d) {
+          this.water = this.round(Math.max(80, Math.min(1000, Number(this.water) + d)), 0);
+          this.onWaterInput();
+        },
+
+        step(at, titleKey, detailKey, target, hold, pour, kind, vars = {}) {
+          return {
+            at,
+            title: this.t(titleKey),
+            detail: this.t(detailKey, { ml: target, ...vars }),
+            target,
+            hold,
+            pour,
+            kind,
+          };
+        },
+
+        oneCupSteps() {
+          const w = this.water;
+          const p = (n) => this.round((w * n) / 5, 0);
+          return [
+            this.step(0, 'step.bloom', 'detail.bloom1', p(1), 10, true, 'pour'),
+            this.step(10, 'step.swirlBloom', 'detail.swirlBloom', p(1), 35, false, 'swirl'),
+            this.step(45, 'step.pour40', 'detail.pour40', p(2), 15, true, 'pour'),
+            this.step(60, 'step.pause', 'detail.pauseHold', p(2), 10, false, 'hold'),
+            this.step(70, 'step.pour60', 'detail.pour60', p(3), 10, true, 'pour'),
+            this.step(80, 'step.pause', 'detail.pauseShort', p(3), 10, false, 'hold'),
+            this.step(90, 'step.pour80', 'detail.pour80', p(4), 10, true, 'pour'),
+            this.step(100, 'step.pause', 'detail.pauseShort', p(4), 10, false, 'hold'),
+            this.step(110, 'step.pour100', 'detail.pour100', p(5), 10, true, 'pour'),
+            this.step(120, 'step.swirl', 'detail.swirl', p(5), 5, false, 'swirl'),
+            this.step(125, 'step.drawdown', 'detail.drawdown1', p(5), 55, false, 'drawdown'),
+          ];
+        },
+
+        twoCupSteps() {
+          const w = this.water;
+          const bloom = this.round(Math.min(this.coffee * 2, w * 0.2), 0);
+          const sixty = this.round(w * 0.6, 0);
+          const full = this.round(w, 0);
+          return [
+            this.step(0, 'step.bloom', 'detail.bloom2', bloom, 10, true, 'pour'),
+            this.step(10, 'step.swirlBloom', 'detail.swirlBloom2', bloom, 35, false, 'swirl'),
+            this.step(45, 'step.main60', 'detail.main60', sixty, 30, true, 'pour'),
+            this.step(75, 'step.finish100', 'detail.finish100', full, 30, true, 'pour'),
+            this.step(105, 'step.stir', 'detail.stir', full, 10, false, 'stir'),
+            this.step(115, 'step.swirl', 'detail.swirl2', full, 10, false, 'swirl'),
+            this.step(125, 'step.drawdown', 'detail.drawdown2', full, 85, false, 'drawdown'),
+          ];
+        },
+
+        formatTime(sec) {
+          const s = Math.max(0, Math.floor(sec));
+          const m = Math.floor(s / 60);
+          const r = s % 60;
+          return `${m}:${String(r).padStart(2, '0')}`;
+        },
+
+        startTimer() {
+          if (this._raf) {
+            cancelAnimationFrame(this._raf);
+            this._raf = null;
+          }
+          this.timerActive = true;
+          this.paused = false;
+          this.elapsed = 0;
+          this._elapsedMs = 0;
+          this._lastTick = performance.now();
+          this._tick();
+          if (navigator.wakeLock?.request) {
+            navigator.wakeLock.request('screen').catch(() => {});
+          }
+        },
+
+        cancelTimer() {
+          this.timerActive = false;
+          this.paused = false;
+          this.elapsed = 0;
+          this._elapsedMs = 0;
+          if (this._raf) cancelAnimationFrame(this._raf);
+          this._raf = null;
+        },
+
+        togglePause() {
+          if (!this.timerActive) return;
+          if (this.paused) {
+            this._lastTick = performance.now();
+            this.paused = false;
+            this._tick();
+          } else {
+            const now = performance.now();
+            this._elapsedMs += now - this._lastTick;
+            this._lastTick = now;
+            this.elapsed = this._elapsedMs / 1000;
+            this.paused = true;
+            if (this._raf) cancelAnimationFrame(this._raf);
+            this._raf = null;
+          }
+        },
+
+        skipStep() {
+          if (!this.timerActive || !this.currentStep) return;
+          const s = this.steps;
+          const i = this.currentStepIndex;
+          const nextAt = i + 1 < s.length
+            ? s[i + 1].at
+            : this.totalDuration;
+
+          if (!this.paused) {
+            const now = performance.now();
+            this._elapsedMs += now - this._lastTick;
+            this._lastTick = now;
+          }
+
+          this._elapsedMs = nextAt * 1000;
+          this.elapsed = nextAt;
+          this._lastTick = performance.now();
+
+          if (this.elapsed >= this.totalDuration) {
+            this.elapsed = this.totalDuration;
+            this._elapsedMs = this.totalDuration * 1000;
+            if (this._raf) {
+              cancelAnimationFrame(this._raf);
+              this._raf = null;
+            }
+            return;
+          }
+
+          if (!this.paused && !this._raf) {
+            this._tick();
+          }
+        },
+
+        _tick() {
+          if (!this.timerActive || this.paused) return;
+          const now = performance.now();
+          this._elapsedMs += now - this._lastTick;
+          this._lastTick = now;
+
+          const next = this._elapsedMs / 1000;
+          if (next >= this.totalDuration) {
+            this.elapsed = this.totalDuration;
+            this._raf = null;
+            return;
+          }
+
+          this.elapsed = next;
+          this._raf = requestAnimationFrame(() => this._tick());
+        },
+      };
+    }
+  </script>
+</body>
+</html>

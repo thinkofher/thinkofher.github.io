@@ -32,7 +32,11 @@ and broaden my knowledge of programming techniques.
   - 02.2022 - now, **Software Engineer**. Currently I'm working as a Golang
     Software Enginner at OLX Group. I'm extending functionalities of multiple
     OLX Real Estate SaaS services (for example: [Otodom](https://otodom.pl)),
-    backed by microservice architecture and AWS serverless solutions.
+    backed by microservice architecture and AWS serverless solutions. Right now
+    I'm focused on user account experience including: registration,
+    authorization, authentication or even sub-accounts and organizations. I'm
+    also taking part in many security oriented initiatives like captcha
+    implementation for Real Estate services.
 - Warszawa, [Grupa Wirtualna Polska](https://holding.wp.pl/en)
   - 03.2021 - 01.2022, **Backend Developer**. I was a part of the team
     responsible for maintenance of [1login.wp.pl](https://1login.wp.pl/) and

@@ -1,4 +1,13 @@
 ---
+- name: upupidae
+  url: https://github.com/thinkofher/upupidae
+  tags: [go, web, compilers]
+  description: |
+    Upupidae is a Go package that let's you write your utility classes directly
+    in your Go code, without need for additional compile step. Styles are
+    compiled dynamically, when you "render" your components during runtime of
+    your Go program. It is basically alternative Tailwind CSS implementation
+    written in Golang, with different philosophy, but same syntax.
 - name: okrzeja
   url: https://code.hauru.club/okrzeja/home
   tags: [go, web, sql]
